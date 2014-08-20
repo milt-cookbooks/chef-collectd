@@ -23,7 +23,7 @@ actions :create, :delete
 
 attribute :name, :kind_of => String, :name_attribute => true
 
-types = %w(plugin python perl exec unixsock java filecount tail write_graphite)
+types = %w(plugin python perl exec unixsock java filecount tail write_graphite write_http)
 attribute :type, :kind_of => String, :default => 'plugin', :equal_to => types
 
 attribute :options, :kind_of => Hash
