@@ -36,6 +36,117 @@ Three main recipes are provided:
 
 The client recipe will use the search index to automatically locate the server hosts, so no manual configuration is required.
 
+# PLUGINS #
+
+Two main recipes for configuring [collectd plugins](https://collectd.org/wiki/index.php/Table_of_Plugins) are provided:
+
++ collectd::data_bag_plugins - Configure collectd plugins defined in data bags
++ collectd::nested_plugins - Configure collectd plugins defined in nested attributes
+
+## collectd::data_bag_plugins ##
+
+The `collectd::data_bag_plugins` recipe can be used by adding each plugin to load as a data bag. Settings for each
+plugin should be added under the `options` key.
+
+For example:
+
+`data_bags/collectd/df.json`:
+
+```ruby
+{
+  "id": "df",
+  "options": {
+    "f_s_type": "devfs",
+    "ignore_selected": true,
+    "report_by_device": true,
+    "report_reserved": true
+  }
+}
+```
+
+`data_bags/collectd/disk.json`:
+
+```ruby
+{
+  "id": "disk",
+  "options": {
+    "#": " This should collect data for all disk names beginning with 'hd'",
+    "disk": "/^hd/",
+    "ignore_selected": false
+  }
+}
+```
+
+`data_bags/collectd/cpu.json`:
+
+```ruby
+{
+  "id": "cpu",
+  "options": {}
+}
+```
+
+`data_bags/collectd/swap.json`:
+
+```ruby
+{
+  "id": "swap",
+  "options": {}
+}
+```
+
+`data_bags/collectd/memory.json`:
+
+```ruby
+{
+  "id": "memory",
+  "options": {}
+}
+```
+
+`data_bags/collectd/interface.json`:
+
+```ruby
+{
+  "id": "interface",
+  "options": {
+    "interface": "lo",
+    "ignore_selected": true
+  }
+}
+```
+
+## collectd::nested_plugins ##
+
+The `collectd::nested_plugins` recipe can be used by adding each plugin to load, along with any settings as a nested Hash.
+(Note: chef uses a [Mash](http://docs.opscode.com/essentials_cookbook_attribute_files.html#attribute-notation) behind the scenes)
+
+For example, to add a set of collectd plugins in a role:
+
+```ruby
+default_attributes({
+  collectd: {
+      plugin_dir: "/usr/lib/collectd", 
+      plugins: {
+          df: {
+              f_s_type: "devfs", 
+              ignore_selected: true, 
+              report_by_device: true, 
+              report_reserved: true
+          }, 
+          disk: {}, 
+          cpu: {}, 
+          swap: {}, 
+          memory: {}, 
+          interface: {
+            interface: "lo",
+            ignore_selected: true
+          }
+      }
+  }
+})
+```
+
 ## LWRPs ##
 
 A lwrp is included for configuring plugins.
