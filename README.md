@@ -1,7 +1,8 @@
-# Collectd [![Build Status](https://secure.travis-ci.org/miah/chef-collectd.png)](http://travis-ci.org/miah/chef-collectd)
+This is our maintenance fork from miah and noahs unmaintained version.  I've merged a few PR's that were on upstream, but we only use the client bits of this cookbook and the LWRPS. 
+
+# Collectd 
 
 # DESCRIPTION #
-
 Configure and install the [collectd](http://collectd.org/) monitoring daemon.
 
 # REQUIREMENTS #

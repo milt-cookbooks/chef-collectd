@@ -1,34 +1,56 @@
 ---
-driver_config:
-  require_chef_omnibus: latest
+driver:
+  name: docker
+  use_sudo: false
+  socket: <%= ENV['DOCKER_HOST'] %>
+  privileged: true
+  run_command: /sbin/init
+  provision_command:
+    - yum install -y tar
+
+
+provisioner:
+  name: chef_zero
+  require_chef_omnibus: 11.16.4
+
 
 platforms:
-- name: ubuntu-13.10
-- name: debian-7.0
-- name: centos-6.4
+- name: centos-5
+- name: centos-6
+- name: centos7
+  driver:
+    dockerfile: test/cent7-dockerfile
+    platform: centos
+    run_command: /usr/sbin/init
 
 suites:
 - name: default
   run_list:
   - recipe[collectd_test]
+
 - name: collectd-server
   run_list:
   - recipe[collectd_test::server]
+
 - name: collectd-client_graphite
   run_list:
   - recipe[collectd_test::client_graphite]
+
 - name: collectd-client_collectd
   run_list:
   - recipe[collectd_test::client_collectd]
+
 - name: collectd-plugin
   run_list:
   - recipe[collectd_test::plugin]
+
 - name: collectd-data_bag_plugins
   run_list:
   - recipe[collectd::data_bag_plugins]
   attributes:
     collectd:
       plugins: ['df', 'load']
+
 - name: collectd-authfile
   run_list:
     - recipe[collectd_test::authfile]
