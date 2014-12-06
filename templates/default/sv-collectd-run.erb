@@ -1,3 +1,4 @@
 #!/bin/sh
 ulimit -n <%= @node['collectd']['ulimit']['file_descriptors'] %>
+exec 2>&1
 exec <%= @node['collectd']['sbin_dir'] %>/collectd -f -C <%= @node['collectd']['sysconf_dir'] %>/collectd.conf

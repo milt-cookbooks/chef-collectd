@@ -16,6 +16,7 @@ group :kitchen_common do
 end
 
 group :kitchen_cloud do
+  gem 'droplet_kit', '< 1.1.0' if RUBY_VERSION < '2'
   gem 'kitchen-digitalocean', :require => false
 end
 
